@@ -1,0 +1,38 @@
+
+MODNAME := jme
+TEMPFILES := $(MODNAME).o $(MODNAME).mod.c $(MODNAME).mod.o Module.symvers .$(MODNAME).*.cmd .tmp_versions modules.order
+
+EXTRA_CFLAGS += -Wall -O3
+#EXTRA_CFLAGS += -DTX_DEBUG
+#EXTRA_CFLAGS += -DREG_DEBUG
+
+obj-m := $(MODNAME).o
+
+ifeq (,$(BUILD_KERNEL))
+BUILD_KERNEL=$(shell uname -r)
+endif
+
+KSRC ?= /lib/modules/$(BUILD_KERNEL)/build
+
+MODULE_INSTALLDIR = /lib/modules/$(BUILD_KERNEL)/kernel/drivers/net
+
+all:
+	@$(MAKE) -C $(KSRC) SUBDIRS=$(shell pwd) modules
+	@rm -rf $(TEMPFILES)
+
+checkstack:
+	$(MAKE) -C $(KSRC) SUBDIRS=$(shell pwd) modules
+	objdump -d $(obj-m) | perl $(KSRC)/scripts/checkstack.pl i386
+	@rm -rf $(TEMPFILES)
+
+namespacecheck:
+	$(MAKE) -C $(KSRC) SUBDIRS=$(shell pwd) modules
+	perl $(KSRC)/scripts/namespace.pl
+	@rm -rf $(TEMPFILES)
+
+clean:
+	@rm -rf $(MODNAME).ko $(TEMPFILES)
+
+install: all
+	install -c -m 644 *.ko $(MODULE_INSTALLDIR)
+	/sbin/depmod -ae
