@@ -19,7 +19,7 @@ define KernelPackage/jme
   DEPENDS:=@PCI_SUPPORT +kmod-mii
   KCONFIG:=
   FILES:=$(LINUX_DIR)/drivers/net/ethernet/jme.ko
-  AUTOLOAD:=$(call AutoLoad,30,jme,1)
+  AUTOLOAD:=$(call AutoProbe,mt7615e)
 endef
 
 define KernelPackage/jme/description
