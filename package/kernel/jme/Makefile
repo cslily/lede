@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
-PKG_NAME:=w1-gpio-custom
+PKG_NAME:=jme-eth-driver
 PKG_RELEASE:=4
 
 include $(INCLUDE_DIR)/package.mk
