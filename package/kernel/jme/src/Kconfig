@@ -1,4 +1,0 @@
-config JMC
-	tristate "JMicron PCI Express Gigabit Ethernet Adapter driver"
-	help
-　            The jme device driver provides support for JMicron JMC25x PCI Express Gigabit Ethernet controllers.
